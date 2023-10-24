@@ -40,5 +40,7 @@ void loop() {
     digitalWrite(P_PUMP, HIGH);
     delay(P);
     digitalWrite(P_PUMP, LOW);
+
+    Serial.write("done");
   }
 }
