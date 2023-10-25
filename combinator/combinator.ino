@@ -1,46 +1,92 @@
-#define R_PUMP 1
-#define Y_PUMP 2
-#define B_PUMP 3
-#define P_PUMP 4
+#define RA_PUMP 2
+#define RB_PUMP 3
+#define YA_PUMP 4
+#define YB_PUMP 5
+#define BA_PUMP 6
+#define BB_PUMP 7
+#define PA_PUMP 8
+#define PB_PUMP 9
 
-int R;
-int Y;
-int B;
-int P;
+long R;
+long Y;
+long B;
+long P;
+char ch;
 
 void setup() {
   Serial.begin(9600);
-  pinMode(R_PUMP, OUTPUT);
-  pinMode(Y_PUMP, OUTPUT);
-  pinMode(B_PUMP, OUTPUT);
-  pinMode(P_PUMP, OUTPUT);
+  Serial.println("Hi");
+  pinMode(RA_PUMP, OUTPUT);
+  pinMode(YA_PUMP, OUTPUT);
+  pinMode(BA_PUMP, OUTPUT);
+  pinMode(PA_PUMP, OUTPUT);
+
+  pinMode(RB_PUMP, OUTPUT);
+  pinMode(YB_PUMP, OUTPUT);
+  pinMode(BB_PUMP, OUTPUT);
+  pinMode(PB_PUMP, OUTPUT);
+}
+
+long readLock() {
+  while (!Serial.available()) {
+    delay(50);
+  }
+
+  long buf = Serial.parseInt();
+  //  Serial.read(); // 개행 skip
+
+  return buf;
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  if (Serial.available()) {
-    Serial.readString();  // begin 스킵
-    R = Serial.parseInt();
-    G = Serial.parseInt();
-    B = Serial.parseInt();
-    P = Serial.parseInt();
+  while (true) {
+    if (Serial.available()) {
+      ch = Serial.read();  // begin 스킵
+      //      Serial.read(); // 개행 skip
 
-    digitalWrite(R_PUMP, HIGH);
-    delay(R);
-    digitalWrite(R_PUMP, LOW);
-    
-    digitalWrite(Y_PUMP, HIGH);
-    delay(Y);
-    digitalWrite(Y_PUMP, LOW);
+      if (ch != 'b') continue;
 
-    digitalWrite(B_PUMP, HIGH);
-    delay(B);
-    digitalWrite(B_PUMP, LOW);
+      delay(100);
 
-    digitalWrite(P_PUMP, HIGH);
-    delay(P);
-    digitalWrite(P_PUMP, LOW);
+      R = readLock();
+      Serial.println(R);
+      Y = readLock();
+      Serial.println(Y);
+      B = readLock();
+      Serial.println(B);
+      P = readLock();
+      Serial.println(P);
 
-    Serial.write("done");
+      Serial.flush();
+
+
+      digitalWrite(RA_PUMP, HIGH);
+      digitalWrite(RB_PUMP, LOW);
+      delay(R);
+      digitalWrite(RA_PUMP, LOW);
+      digitalWrite(RB_PUMP, LOW);
+
+      digitalWrite(YA_PUMP, HIGH);
+      digitalWrite(YB_PUMP, LOW);
+      delay(Y);
+      digitalWrite(YA_PUMP, LOW);
+      digitalWrite(YB_PUMP, LOW);
+
+      digitalWrite(BA_PUMP, HIGH);
+      digitalWrite(BB_PUMP, LOW);
+      delay(B);
+      digitalWrite(BA_PUMP, LOW);
+      digitalWrite(BB_PUMP, LOW);
+
+      digitalWrite(PA_PUMP, HIGH);
+      digitalWrite(PB_PUMP, LOW);
+      delay(P);
+      digitalWrite(PA_PUMP, LOW);
+      digitalWrite(PB_PUMP, LOW);
+
+      Serial.println(1);
+    }
+    delay(100);
   }
 }
