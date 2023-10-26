@@ -67,10 +67,10 @@ while True:
         server.close()
         exit(0)  # Illegal data
 
-    R, Y, B, P = [0, 0, 30, 70]
+    R, Y, B, P = colors[data['code']]
 
-    total_time = 4000
-    margin = 500
+    total_time = 3000
+    margin = 700
 
     R = total_time * R / 100 + margin if not R == 0 else 0
     Y = total_time * Y / 100 + margin if not Y == 0 else 0
@@ -78,8 +78,6 @@ while True:
     P = total_time * P / 100 + margin if not P == 0 else 0
 
     suc = int(send_color(R, Y, B, P))
-
-    exit()
 
     if suc == 1:
         server.send(json.dumps({
