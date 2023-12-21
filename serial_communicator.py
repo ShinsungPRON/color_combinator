@@ -92,3 +92,4 @@ while True:
             "status": "error",
             "device": config['DEFAULT']['deviceName']
         }).encode())
+
